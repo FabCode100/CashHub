@@ -36,8 +36,9 @@ CREATE TABLE DadosEmpresa
 ); 
 
 #armazena dados do representante
-
-CREATE TABLE DadosRepresante 
+#feita uma alteraçao no nome que estava errado.
+ 
+CREATE TABLE DadosRepresetante 
 ( 
  NomeCompleto VARCHAR(20) NOT NULL,  
  Sexo enum('M','F') NOT NULL,  
