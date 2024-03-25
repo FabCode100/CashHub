@@ -1,0 +1,91 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: white;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.texto {
+  margin-bottom: 20px;
+}
+
+.nome,
+.sexo,
+.data,
+.cpf,
+.telefone,
+.email,
+.senha,
+.confimarSenha {
+  margin-bottom: 15px;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="date"],
+select {
+  width: 250px;
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #784629;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+select {
+  width: 254px;
+}
+
+.login button {
+  padding: 10px 20px;
+  background-color: #784629;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.login {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.login a {
+  color: #784629;
+  text-decoration: none;
+}
+
+.login a:hover {
+  text-decoration: underline;
+}
+
+.sexo {
+  margin-bottom: 20px;
+}
+
+.data {
+  margin-top: 15px;
+}
+
+.cadrastro {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.cadrastro button {
+  padding: 10px 20px;
+  background-color: #784629;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}

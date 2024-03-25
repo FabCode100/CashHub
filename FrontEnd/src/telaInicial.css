@@ -1,0 +1,53 @@
+/* Estilos para o cabeçalho */
+.header {
+  text-align: left;
+  background-image: linear-gradient(to bottom, #e96921, #eb7837, #f9c1a2);
+  padding: 20px;
+}
+
+.saldo {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.conta {
+  text-align: left;
+  margin-top: 20px;
+}
+
+.box {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.quadrado {
+  width: calc((100% - 40px * 3) / 4);
+  height: 100px;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  margin: 10px;
+  text-align: center;
+  line-height: 100px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.grafico {
+  text-align: center;
+  margin-top: 20px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #784629;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5c3422;
+}

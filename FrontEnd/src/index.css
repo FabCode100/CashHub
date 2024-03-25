@@ -1,0 +1,20 @@
+body {
+   background-image: linear-gradient(to bottom, #A01F0E, #a80036, #b01668, #923088, #6842A6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+ } 
+ 
+ #logos {
+     text-align: center;
+ }
+ 
+ #logos img {
+     max-width: 100%;
+     height: auto;
+     display: block;
+     margin: 0 auto;
+ }
+ 
