@@ -21,8 +21,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false, unique = true)
-    private String name;
+    @Column(name = "sender", nullable = false, unique = true)
+    private String sender;
 
     @Column(name = "date", nullable = false)
     private Date date;
