@@ -4,8 +4,8 @@ import com.cashub.cashhubbackend.cashub.domain.payment.Payment;
 import com.cashub.cashhubbackend.cashub.dto.PaymentRequest;
 import com.cashub.cashhubbackend.cashub.dto.PaymentResponse;
 import com.cashub.cashhubbackend.cashub.service.PaymentService;
-import com.stripe.exception.StripeException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,13 +19,20 @@ public class PaymentController {
     public PaymentController(PaymentService paymentService) {
         this.paymentService = paymentService;
     }
+
     @GetMapping
     public List<Payment> getAllPayments() {
         return paymentService.getAllPayments();
     }
+
     @PostMapping("/process")
-    public ResponseEntity<String> processPayment(@RequestBody PaymentRequest request) throws StripeException {
-        String response = String.valueOf(paymentService.processPayment(request));
-        return ResponseEntity.ok(response);
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    public ResponseEntity<PaymentResponse> processPayment(@RequestBody PaymentRequest request) {
+        PaymentResponse response = paymentService.processPayment(request);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.badRequest().body(response);
+        }
     }
 }
