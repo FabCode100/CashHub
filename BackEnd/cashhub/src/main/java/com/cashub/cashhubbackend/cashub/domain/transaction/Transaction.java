@@ -1,7 +1,7 @@
 package com.cashub.cashhubbackend.cashub.domain.transaction;
 
+import com.cashub.cashhubbackend.cashub.domain.account.Account;
 import com.cashub.cashhubbackend.cashub.domain.category.Category;
-import com.cashub.cashhubbackend.cashub.domain.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,8 +27,8 @@ public class Transaction {
     @Column(name = "date", nullable = false)
     private Date date;
 
-    @Column(name = "value", nullable = false)
-    private Float value;
+    @Column(name = "amount", nullable = false)
+    private Float amount;
 
     @Column(name = "description", nullable = false)
     private String description;
@@ -39,7 +39,7 @@ public class Transaction {
 
     @ManyToOne
     @JoinColumn(name = "account_id")
-    private User account;
+    private Account account;
 
     @Column(name = "type", nullable = false)
     private String type;

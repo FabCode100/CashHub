@@ -1,6 +1,6 @@
 package com.cashub.cashhubbackend.cashub.service;
 
-import com.cashub.cashhubbackend.cashub.domain.payment.PaymentException;
+import com.cashub.cashhubbackend.cashub.domain.payment.exception.PaymentException;
 import com.cashub.cashhubbackend.cashub.dto.PaymentRequest;
 import com.cashub.cashhubbackend.cashub.dto.PaymentResponse;
 import com.cashub.cashhubbackend.cashub.gateway.PaymentGateway;
@@ -16,19 +16,18 @@ import java.util.Map;
 @Service
 public class StripePaymentGateway implements PaymentGateway {
 
-    @Value("${stripe.apiKey}")
-    private String stripeApiKey;
+    public StripePaymentGateway(@Value("${stripe.apiKey}") String stripeApiKey) {
+        Stripe.apiKey = stripeApiKey;
+    }
 
     @Override
     public Charge charge(PaymentRequest paymentRequest) throws PaymentException {
         try {
-            Stripe.apiKey = stripeApiKey;
             Map<String, Object> chargeParams = new HashMap<>();
-            chargeParams.put("amount", paymentRequest.amount().intValueExact() * 100);
+            chargeParams.put("amount", paymentRequest.amount() * 100);
             chargeParams.put("currency", "usd");
             chargeParams.put("source", paymentRequest.token());
-            Charge charge = Charge.create(chargeParams);
-            return charge;
+            return Charge.create(chargeParams);
         } catch (StripeException e) {
             throw new PaymentException("Payment failed: " + e.getMessage());
         }

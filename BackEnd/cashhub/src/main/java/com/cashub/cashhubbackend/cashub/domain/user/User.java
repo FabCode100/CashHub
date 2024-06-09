@@ -1,6 +1,5 @@
 package com.cashub.cashhubbackend.cashub.domain.user;
 
-import java.util.Date;
 import java.util.List;
 
 import com.cashub.cashhubbackend.cashub.domain.account.Account;
@@ -22,15 +21,16 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "Name", nullable = false)
+    @Column(name = "name", nullable = false)
     private String firstName;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", nullable = false, unique = true)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 }
+

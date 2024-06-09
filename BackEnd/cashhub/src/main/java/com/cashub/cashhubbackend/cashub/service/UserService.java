@@ -4,7 +4,7 @@ import com.cashub.cashhubbackend.cashub.domain.user.User;
 import com.cashub.cashhubbackend.cashub.repository.UserRepository;
 import com.cashub.cashhubbackend.cashub.domain.user.exception.UserNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder; // Assuming Spring Security is used
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,12 +20,13 @@ public class UserService {
     private PasswordEncoder passwordEncoder;  // For password hashing
 
     public User createUser(User user) {
-        // 1. Hash password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        String encodedPassword = passwordEncoder.encode(user.getPassword());
+        System.out.println("Encoded password: " + encodedPassword);  // Log para verificação
 
-        // 2. Save user to database
+        user.setPassword(encodedPassword);
         return userRepository.save(user);
     }
+
 
     public User getUser(Long id) {
         // 1. Find user by id
