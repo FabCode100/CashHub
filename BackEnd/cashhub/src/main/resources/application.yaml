@@ -1,0 +1,11 @@
+spring:
+  security:
+    user:
+      name: admin
+      password: adminpassword
+logging:
+  level:
+    com:
+      cashub:
+        cashhubbackend:
+          cashub: DEBUG

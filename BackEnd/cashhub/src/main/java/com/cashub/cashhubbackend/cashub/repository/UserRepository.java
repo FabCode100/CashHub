@@ -1,27 +1,10 @@
 package com.cashub.cashhubbackend.cashub.repository;
 
-import com.cashub.cashhubbackend.cashub.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import com.cashub.cashhubbackend.cashub.domain.user.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/users")
-public class UserRepository {
-
-    @Autowired
-    private UserRepository userRepository;
-
-    @PostMapping
-    public User createUser(@RequestBody User user) {
-        return save(user);
-    }
-
-    // Outros métodos para manipular usuários
-    static User save(User user) {
-        System.out.println("I just got executed!");
-        return user;
-    }
+@Repository
+public interface UserRepository extends JpaRepository<User, Long> {
+    // Métodos adicionais específicos podem ser adicionados aqui, se necessário
 }
-
