@@ -1,16 +1,19 @@
 package com.cashub.cashhubbackend.cashub.domain.payment;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.cashub.cashhubbackend.cashub.domain.transaction.Transaction;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-@Setter
-@Getter
 @Entity
+@Table(name = "payments")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
 
     // Getters and setters
@@ -20,4 +23,7 @@ public class Payment {
     private String description;
     private double amount;
 
+    @OneToOne
+    @JoinColumn(name = "transaction_id", nullable = false)
+    private Transaction transaction;
 }

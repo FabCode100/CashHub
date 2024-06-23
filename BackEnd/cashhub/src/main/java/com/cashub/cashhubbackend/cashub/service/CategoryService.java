@@ -12,57 +12,36 @@ import java.util.Optional;
 @Service
 public class CategoryService {
 
+    private final CategoryRepository categoryRepository;
+
     @Autowired
-    private CategoryRepository categoryRepository;
+    public CategoryService(CategoryRepository categoryRepository) {
+        this.categoryRepository = categoryRepository;
+    }
 
     public Category createCategory(Category category) {
-        // 1. Save category to database
         return categoryRepository.save(category);
     }
 
     public Category getCategory(Long id) {
-        // 1. Find category by id
-        Optional<Category> categoryOptional = categoryRepository.findById(id);
-
-        // 2. Check if category exists
-        if (categoryOptional.isEmpty()) {
-            throw new CategoryNotFoundException(id);
-        }
-
-        // 3. Return category
-        return categoryOptional.get();
+        return categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException(id));
     }
 
     public List<Category> getAllCategories() {
-        // 1. Find all categories
         return categoryRepository.findAll();
     }
 
-    public Category updateCategory(Category category) {
-        // 1. Find category by id (optional, can be done based on the category object itself)
-        Long categoryId = category.getId();
-        // Optional<Category> existingCategoryOptional = categoryRepository.findById(categoryId);
-
-        // 2. Update category details
-        // ... (you can update specific fields based on your needs)
-
-        // 3. Save updated category to database
+    public Category updateCategory(Long id, Category updatedCategory) {
+        Category category = getCategory(id);
+        category.setName(updatedCategory.getName());
+        // Add more fields to update as needed
         return categoryRepository.save(category);
     }
 
     public void deleteCategory(Long id) {
-        // 1. Find category by id
-        Optional<Category> categoryOptional = categoryRepository.findById(id);
-
-        // 2. Check if category exists
-        if (categoryOptional.isEmpty()) {
-            throw new CategoryNotFoundException(id);
-        }
-
-        // 3. Delete category (consider handling associated transactions)
-        categoryRepository.deleteById(id);
+        Category category = getCategory(id);
+        categoryRepository.delete(category);
     }
 
-    // Additional methods specific to category management can be added here
-    // For example, find category by name etc.
 }
