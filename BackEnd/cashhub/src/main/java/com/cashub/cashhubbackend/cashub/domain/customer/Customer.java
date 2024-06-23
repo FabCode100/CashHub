@@ -1,4 +1,4 @@
-package com.cashub.cashhubbackend.cashub.domain.user;
+package com.cashub.cashhubbackend.cashub.domain.customer;
 
 import java.util.List;
 
@@ -10,12 +10,12 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "users") // Especifica o nome da tabela no banco de dados
+@Table(name = "customers") // Especifica o nome da tabela no banco de dados
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
+public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,10 @@ public class User {
     @Column(name = "password", nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "customer")
     private List<Account> accounts;
+
+    public Customer(String id, String email, Long created) {
+    }
 }
 

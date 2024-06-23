@@ -44,7 +44,7 @@ public class PaymentService {
         paymentRepository.save(payment);
     }
 
-    public PaymentResponse processPayment(PaymentRequest paymentRequest) {
+    public PaymentResponse processPayment(PaymentRequest paymentRequest) throws PaymentException {
         logger.info("Iniciando processamento do pagamento");
         try {
             validatePaymentDetails(paymentRequest);
@@ -59,36 +59,28 @@ public class PaymentService {
 
             // Create a new PaymentRequest with the tokenized values
             PaymentRequest secureRequest = new PaymentRequest(
-                    cardNumberToken,
+                    paymentRequest.cardNumber(),
                     paymentRequest.expirationDate(),
                     cvvToken,
                     paymentRequest.amount(),
                     paymentRequest.cardType(),
-                    paymentRequest.token()
+                    null
             );
+
             Charge charge = paymentGateway.charge(secureRequest);
             return new PaymentResponse(true, "Pagamento realizado com sucesso", charge.getId());
         } catch (CreditCardNumberInvalidException e) {
-            logger.error("Número de cartão de crédito inválido", e);
-            return new PaymentResponse(false, "Número de cartão de crédito inválido", null);
+            throw new CreditCardNumberInvalidException();
         } catch (ExpiredCardException e) {
-            logger.error("Cartão expirado", e);
-            return new PaymentResponse(false, "Cartão expirado", null);
+            throw new ExpiredCardException();
         } catch (InvalidCvvException e) {
-            logger.error("CVV inválido", e);
-            return new PaymentResponse(false, "CVV inválido", null);
-        } catch (PaymentAuthorizationException e) {
-            logger.error("Pagamento recusado: {}", e.getMessage(), e);
-            return new PaymentResponse(false, "Pagamento recusado: " + e.getMessage(), null);
+            throw new InvalidCvvException();
+        } catch (InvalidPaymentAmountException e) {
+            throw new InvalidPaymentAmountException();
         } catch (PaymentGatewayException e) {
-            logger.error("Erro de comunicação com o gateway de pagamento", e);
-            return new PaymentResponse(false, "Erro de comunicação com o gateway de pagamento", null);
-        } catch (PaymentException e) {
-            logger.error("Erro de validação de pagamento: {}", e.getMessage(), e);
-            return new PaymentResponse(false, "Erro de validação de pagamento: " + e.getMessage(), null);
+            throw new PaymentGatewayException();
         } catch (Exception e) {
-            logger.error("Erro interno do sistema durante o processamento do pagamento", e);
-            return new PaymentResponse(false, "Erro interno do sistema. Tente novamente mais tarde.", null);
+            throw new PaymentException("Erro desconhecido: " + e.getMessage());
         }
     }
 
@@ -97,14 +89,18 @@ public class PaymentService {
         logger.info("Iniciando validação dos detalhes do pagamento");
 
         // Card Number Validation (more comprehensive)
-        if (!isValidCardNumber(request.cardNumber())) {
-            errors.add("Invalid card number format or checksum");
+        try {
+            if (!isValidCardNumber(request.cardNumber())) {
+                errors.add("Invalid card number format or checksum");
+            }
+        } catch (CreditCardNumberInvalidException e) {
+            errors.add(e.getMessage());
         }
 
         // Expiry Date Validation
         try {
             if (!isValidExpiryDate(request.expirationDate())) {
-                errors.add("Invalid expiry date format or expired card");
+                errors.add("Invalid expiry date format");
             }
         } catch (ExpiredCardException e) {
             errors.add(e.getMessage());
@@ -121,25 +117,27 @@ public class PaymentService {
 
         // Amount Validation
         if (request.amount() <= 0) {
-            errors.add("Invalid payment amount");
+            errors.add(new InvalidPaymentAmountException().getMessage());
         }
 
         if (!errors.isEmpty()) {
-            throw new PaymentException(String.join(", ", errors));
+            String errorMessage = String.join(", ", errors);
+            logger.error("Validation errors: {}", errorMessage);
+            throw new PaymentException(errorMessage);
         }
 
         logger.info("Validação dos detalhes do pagamento concluída");
     }
 
-    private boolean isValidCardNumber(String cardNumber) {
+    private boolean isValidCardNumber(String cardNumber) throws CreditCardNumberInvalidException {
         // Verifique se o número do cartão não está vazio e se contém apenas dígitos
         if (cardNumber == null || !cardNumber.matches("[0-9]+")) {
-            return false;
+            throw new CreditCardNumberInvalidException();
         }
 
         // Verifique se o número do cartão tem um comprimento válido
         if (cardNumber.length() < 13 || cardNumber.length() > 19) {
-            return false;
+            throw new CreditCardNumberInvalidException();
         }
 
         int sum = 0;
@@ -155,10 +153,11 @@ public class PaymentService {
             sum += digit;
             alternate = !alternate;
         }
-        return (sum % 10 == 0);
-
+        if (sum % 10 != 0) {
+            throw new CreditCardNumberInvalidException();
+        }
+        return true;
     }
-
 
     private boolean isValidExpiryDate(String expiryDate) throws ExpiredCardException {
         try {
@@ -172,8 +171,7 @@ public class PaymentService {
             }
         } catch (ParseException e) {
             // Se ocorrer uma ParseException, a data fornecida não está no formato esperado
-            // Retorne false para indicar que a data de validade não é válida
-            return false;
+            throw new ExpiredCardException("Formato de data de validade inválido");
         }
     }
 

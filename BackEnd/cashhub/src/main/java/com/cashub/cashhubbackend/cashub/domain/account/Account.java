@@ -1,7 +1,7 @@
 package com.cashub.cashhubbackend.cashub.domain.account;
 
 import com.cashub.cashhubbackend.cashub.domain.transaction.Transaction;
-import com.cashub.cashhubbackend.cashub.domain.user.User;
+import com.cashub.cashhubbackend.cashub.domain.customer.Customer;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,8 +35,8 @@ public class Account {
     private Float balance;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "customer_id")
+    private Customer customer;
 
     @OneToMany(mappedBy = "account")
     private List<Transaction> transactions;

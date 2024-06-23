@@ -1,6 +1,7 @@
 package com.cashub.cashhubbackend.cashub.controller;
 
 import com.cashub.cashhubbackend.cashub.domain.payment.Payment;
+import com.cashub.cashhubbackend.cashub.domain.payment.exception.PaymentException;
 import com.cashub.cashhubbackend.cashub.dto.PaymentRequest;
 import com.cashub.cashhubbackend.cashub.dto.PaymentResponse;
 import com.cashub.cashhubbackend.cashub.service.PaymentService;
@@ -27,7 +28,7 @@ public class PaymentController {
 
     @PostMapping("/process")
     @PreAuthorize("hasRole('ROLE_ADMIN')")
-    public ResponseEntity<PaymentResponse> processPayment(@RequestBody PaymentRequest request) {
+    public ResponseEntity<PaymentResponse> processPayment(@RequestBody PaymentRequest request) throws PaymentException {
         PaymentResponse response = paymentService.processPayment(request);
         if (response.isSuccess()) {
             return ResponseEntity.ok(response);
