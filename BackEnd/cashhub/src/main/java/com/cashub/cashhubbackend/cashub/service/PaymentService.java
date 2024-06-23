@@ -59,7 +59,7 @@ public class PaymentService {
 
             // Create a new PaymentRequest with the tokenized values
             PaymentRequest secureRequest = new PaymentRequest(
-                    paymentRequest.cardNumber(),
+                    cardNumberToken,
                     paymentRequest.expirationDate(),
                     cvvToken,
                     paymentRequest.amount(),

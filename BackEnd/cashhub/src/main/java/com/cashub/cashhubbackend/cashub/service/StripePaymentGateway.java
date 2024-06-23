@@ -30,7 +30,7 @@ public class StripePaymentGateway implements PaymentGateway, StripePaymentGatewa
             Map<String, Object> chargeParams = new HashMap<>();
             chargeParams.put("amount", (int) (paymentRequest.amount() * 100)); // valor em centavos
             chargeParams.put("currency", "usd");
-            chargeParams.put("source", paymentRequest.cardNumber());
+            chargeParams.put("source", paymentRequest.token());
 
             return Charge.create(chargeParams);
         } catch (StripeException e) {
