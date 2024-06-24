@@ -21,8 +21,8 @@ public class Customer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String firstName;
+    @Column(name = "username", nullable = false)
+    private String username;
 
     @Column(name = "email", nullable = false, unique = true)
     private String email;
@@ -35,5 +35,6 @@ public class Customer {
 
     public Customer(String id, String email, Long created) {
     }
+
 }
 
