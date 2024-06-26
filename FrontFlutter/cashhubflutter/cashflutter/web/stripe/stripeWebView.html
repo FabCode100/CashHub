@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script> src="https://js.stripe.com/v3/" </script>
+</head>
+<body>
+    <div id = "payment-element"></div>
+    <button class="pay-now-btn">Pay now</button>
+    <script>
+        const stripe =  Stripe("pk_test_51PPDUwB6zFwZkiVemssgUuTeVNYEo3Q8PcCNA4xROl3eabzl134O6Q8SZnOy6aauNaxSTMxBX6qJLTT0XCP5M3zi00N1YmO1Oq");
+        console.log(stripe)
+    </script>
+</body>
+</html>
