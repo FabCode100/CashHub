@@ -37,42 +37,45 @@ class _PaymentScreenState extends State<PaymentScreen> {
         token = '';
     }
     final Map<String, dynamic> paymentData = {
-      'card_number': _cardNumberController.text,
-      'expiry_date': _expiryDateController.text,
+      'cardNumber': _cardNumberController.text,
+      'expirationDate': _expiryDateController.text,
       'cvv': _cvvController.text,
       'amount': _amountController.text,
-      'card_type': _cardType,
+      'cardType': _cardType,
       'token': token
     };
-
+    print(paymentData);
     try {
-    final String basicAuth = 'Basic ${base64Encode(utf8.encode('admin:adminpassword'))}';
+      final String basicAuth =
+          'Basic ${base64Encode(utf8.encode('admin:adminpassword'))}';
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': basicAuth,
-      },
-      body: jsonEncode(paymentData),
-    );
-
-    print('Response status: ${response.statusCode}');
-    print('Response body: ${response.body}');
-
-    if (response.statusCode == 200) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const SuccessScreen()),
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': basicAuth,
+        },
+        body: jsonEncode(paymentData),
       );
-    } else {
-      _showDialog(context, 'Payment Failed', 'Server error: ${response.statusCode}\n${response.body}');
+      print(jsonEncode(paymentData));
+      print('Response status: ${response.statusCode}');
+      print('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const SuccessScreen()),
+        );
+      } else {
+        _showDialog(context, 'Payment Failed',
+            'Server error: ${response.statusCode}\n${response.body}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+      _showDialog(context, 'Payment Failed', 'An error occurred: $e');
     }
-  } catch (e) {
-    print('Error occurred: $e');
-    _showDialog(context, 'Payment Failed', 'An error occurred: $e');
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
