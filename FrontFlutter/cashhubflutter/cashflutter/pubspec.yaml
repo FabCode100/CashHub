@@ -10,6 +10,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_stripe: ^10.2.0
+  flutter_stripe_web: ^5.2.0
   http: ^1.2.1
 
 dev_dependencies:
