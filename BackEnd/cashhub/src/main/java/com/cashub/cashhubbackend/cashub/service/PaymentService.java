@@ -64,7 +64,7 @@ public class PaymentService {
                     cvvToken,
                     paymentRequest.amount(),
                     paymentRequest.cardType(),
-                    null
+                    paymentRequest.token()
             );
 
             Charge charge = paymentGateway.charge(secureRequest);
