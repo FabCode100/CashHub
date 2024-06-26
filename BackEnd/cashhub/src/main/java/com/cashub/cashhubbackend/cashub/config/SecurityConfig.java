@@ -13,6 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -24,14 +27,14 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     @Bean
     public UserDetailsService users(PasswordEncoder passwordEncoder) {
-        // The builder will ensure the passwords are encoded before saving in memory
         UserDetails admin = User.builder()
                 .username("admin")
                 .password(passwordEncoder.encode("adminpassword"))
-                        .roles("USER", "ADMIN")
-                        .build();
+                .roles("USER", "ADMIN")
+                .build();
         return new InMemoryUserDetailsManager(admin);
     }
 
@@ -45,6 +48,19 @@ public class SecurityConfig {
                 )
                 .httpBasic(withDefaults())
                 .formLogin(withDefaults());
+
         return http.build();
+    }
+
+    @Bean
+    public CorsFilter corsFilter() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("*"); // Permitir todos os origens. Você pode restringir a origens específicos, se necessário.
+        config.addAllowedHeader("*"); // Headers permitidos
+        config.addAllowedMethod("*"); // Métodos HTTP permitidos
+        source.registerCorsConfiguration("/**", config);
+        return new CorsFilter(source);
     }
 }
