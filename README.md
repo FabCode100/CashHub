@@ -1,4 +1,4 @@
-# CashFlutter App
+# CashHub App
 
 ## Pré-requisitos
 
