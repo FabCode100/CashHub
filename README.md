@@ -8,6 +8,11 @@ Para rodar este projeto, você precisará ter instalado:
 - Java SDK 21
 - Maven 3.9.8
 
+Frameworks utilizados:
+
+- Spring Boot BackEnd
+- Flutter FrontEnd
+
 ## Configuração do Stripe
 
 Para testar a integração com o Stripe:
